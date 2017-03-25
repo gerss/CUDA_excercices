@@ -11,9 +11,7 @@ int main()
 {
 	const int N  = 10;
 	double A[], B[], C[];
-	
-	__global__ void VecAdd( A, B, C);
-	
+
 	// Kernel invoaction with N threads
 	VecAdd<<<1, N>>>(A,B,C);
 	
