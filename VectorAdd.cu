@@ -1,4 +1,5 @@
 #include <stdio.h>
+using namespace std;
 
 #define SIZE 1024
 
@@ -12,6 +13,7 @@ __global__ void VectorAdd(int *a, int *b, int *c, int n)
 
 int main()
 {
+// ALOCATE AND INITIALIZA DATA ON CPU
 	int *a, *b, *c;
 	int *d_a, *d_b, *d_c;
 
@@ -19,27 +21,35 @@ int main()
 	b = (int *)malloc(SIZE*sizeof(int));
 	c = (int *)malloc(SIZE*sizeof(int));
 
+// ALLOCATE DATA ON GPU
 	cudaMalloc( &d_a, SIZE*sizeof(int));
 	cudaMalloc( &d_b, SIZE*sizeof(int));
 	cudaMalloc( &d_c, SIZE*sizeof(int));
 
-	for( int i=0;i<SIZE;++i)
+	int n
+	cout<<"Digite el numero de elementos del vecotr: ";
+	cin>>n
+
+	for( int i=0;i<n;++i)
 	{
 		a[i] = i;
 		b[i] = i;
 		c[i] = 0;
 	}
 
+// TRANSFER DATA FROM CPU TO GPU
 	cudaMemcpy( d_a, a, SIZE*sizeof(int), cudaMemcpyHostToDevice );
 	cudaMemcpy( d_b, b, SIZE*sizeof(int), cudaMemcpyHostToDevice );
 	cudaMemcpy( d_c, c, SIZE*sizeof(int), cudaMemcpyHostToDevice );
 
+// RUN KERNEL
 	VectorAdd<<< 1, SIZE >>>(d_a, d_b, d_c, SIZE);
 
+// TRANSFER DATA FROM GPU TO CPU
 	cudaMemcpy( c, d_c, SIZE*sizeof(int), cudaMemcpyDeviceToHost );
 
 	for( int i=0;i<10;++i)
-		printf("c[%d] = %d\n", i, c[i]);
+		printf("c[%d] = %d\n", i,c[i]);
 
 	free(a);
 	free(b);
