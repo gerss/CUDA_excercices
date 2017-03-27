@@ -12,6 +12,7 @@ __global__ void VectorAdd(int *a, int *b, int *c, int n)
 
 int main()
 {
+// ALLOCATE AND INITIALIZE DATA ON CPU
 	int *a, *b, *c;
 	int *d_a, *d_b, *d_c;
 
@@ -19,6 +20,7 @@ int main()
 	b = (int *)malloc(SIZE*sizeof(int));
 	c = (int *)malloc(SIZE*sizeof(int));
 
+// ALOCATE DATA ON GPU
 	cudaMalloc( &d_a, SIZE*sizeof(int));
 	cudaMalloc( &d_b, SIZE*sizeof(int));
 	cudaMalloc( &d_c, SIZE*sizeof(int));
@@ -30,12 +32,15 @@ int main()
 		c[i] = 0;
 	}
 
+// TRANSFER DATA FROM CPU TO GPU
 	cudaMemcpy( d_a, a, SIZE*sizeof(int), cudaMemcpyHostToDevice );
 	cudaMemcpy( d_b, b, SIZE*sizeof(int), cudaMemcpyHostToDevice );
 	cudaMemcpy( d_c, c, SIZE*sizeof(int), cudaMemcpyHostToDevice );
 
+// RUN KERNEL
 	VectorAdd<<< 1, SIZE >>>(d_a, d_b, d_c, SIZE);
 
+// TRANSFER DATA FROM GPU TO CPU
 	cudaMemcpy( c, d_c, SIZE*sizeof(int), cudaMemcpyDeviceToHost );
 
 	for( int i=0;i<10;++i)
