@@ -12,6 +12,7 @@ __global__ void VectorAdd(int *a, int *b, int *c, int n)
 
 int main()
 {
+	printf("\n------------------------------\nSUMA VECTORIAL\n------------------------------\n");
 // ALLOCATE AND INITIALIZE DATA ON CPU
 	int *a, *b, *c;
 	int *d_a, *d_b, *d_c;
@@ -33,12 +34,23 @@ int main()
 	}
 
 	printf("\n Vector A\n \n");
-	for( int i=0;i<10;++i)
+	for( int i=0;i<3;++i)
+		printf("a[%d] = %d\n", i, a[i]);
+
+	printf(".\n.\n.\n");
+
+	for( int i=SIZE-3;i<SIZE;++i)
 		printf("a[%d] = %d\n", i, a[i]);
 
 	printf("\n Vector B\n \n");
-	for( int i=0;i<10;++i)
+	for( int i=0;i<3;++i)
 		printf("b[%d] = %d\n", i, b[i]);
+
+	printf(".\n.\n.\n");
+
+	for( int i=SIZE-3;i<SIZE;++i)
+		printf("b[%d] = %d\n", i, b[i]);
+
 
 // TRANSFER DATA FROM CPU TO GPU
 	cudaMemcpy( d_a, a, SIZE*sizeof(int), cudaMemcpyHostToDevice );
@@ -51,10 +63,15 @@ int main()
 // TRANSFER DATA FROM GPU TO CPU
 	cudaMemcpy( c, d_c, SIZE*sizeof(int), cudaMemcpyDeviceToHost );
 
-	printf("\n A[i] + B[i] = C[i] , i=0,1, ... ,9 \n");
+	printf("\n A[i] + B[i] = C[i] \n");
 
 	printf("\n Vector C\n \n");
-	for( int i=0;i<10;++i)
+	for( int i=0;i<3;++i)
+		printf("c[%d] = %d\n", i, c[i]);
+
+	printf(".\n.\n.\n");
+
+	for( int i=SIZE-3;i<SIZE;++i)
 		printf("c[%d] = %d\n", i, c[i]);
 
 	free(a);
