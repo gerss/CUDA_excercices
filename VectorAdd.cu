@@ -32,6 +32,14 @@ int main()
 		c[i] = 0;
 	}
 
+	printf("\n Vector A\n \n");
+	for( int i=0;i<10;++i)
+		printf("a[%d] = %d\n", i, a[i]);
+
+	printf("\n Vector B\n \n");
+	for( int i=0;i<10;++i)
+		printf("b[%d] = %d\n", i, b[i]);
+
 // TRANSFER DATA FROM CPU TO GPU
 	cudaMemcpy( d_a, a, SIZE*sizeof(int), cudaMemcpyHostToDevice );
 	cudaMemcpy( d_b, b, SIZE*sizeof(int), cudaMemcpyHostToDevice );
@@ -43,6 +51,9 @@ int main()
 // TRANSFER DATA FROM GPU TO CPU
 	cudaMemcpy( c, d_c, SIZE*sizeof(int), cudaMemcpyDeviceToHost );
 
+	printf("\n A[i] + B[i] = C[i] , i=0,1, ... ,9 \n");
+
+	printf("\n Vector C\n \n");
 	for( int i=0;i<10;++i)
 		printf("c[%d] = %d\n", i, c[i]);
 
